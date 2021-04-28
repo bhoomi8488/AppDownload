@@ -15,6 +15,11 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+        app:backgroundColor="@color/colorPrimary"
+        app:processColor="@color/colorPrimaryDark"
+        app:circleColor="@color/colorAccent"
+        app:textColor="@color/colorText"
+        app:textSize="@dimen/default_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -24,6 +29,7 @@
         android:layout_width="0dp"
         android:layout_height="186dp"
         android:src="@drawable/download"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

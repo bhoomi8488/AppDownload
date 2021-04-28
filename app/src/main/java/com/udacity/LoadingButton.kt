@@ -17,6 +17,11 @@ class LoadingButton @JvmOverloads constructor(
     private var pen = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private lateinit var valueAnimator : ValueAnimator
+    private var backgroundFill = 0
+    private var processFill = 0
+    private var circleFill = 0
+    private var textColor = 0
+    private var textSize = 0f
 
     private var radiusShape = 0f
     private var fillShape = 0f
@@ -38,6 +43,7 @@ class LoadingButton @JvmOverloads constructor(
                 buttonText = context.getString(R.string.button_name)
                 radiusShape = 0f
                 fillShape = 0f
+                valueAnimator.cancel()
                 invalidate()
             }
         }
@@ -53,27 +59,43 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     init {
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.LoadingButton,
+            defStyleAttr,
+            0
+        )
+
+        with(typedArray) {
+            backgroundFill = getColor(R.styleable.LoadingButton_backgroundColor, 0)
+            processFill = getColor(R.styleable.LoadingButton_processColor, 0)
+            circleFill = getColor(R.styleable.LoadingButton_circleColor, 0)
+            textColor =getColor(R.styleable.LoadingButton_textColor, 0)
+            textSize = getDimension(R.styleable.LoadingButton_textSize, 0f)
+        }
+
+        typedArray.recycle()
 
     }
 
     override fun onDraw(canvas: Canvas?) {
         //For Background
-        canvas?.drawColor(Color.rgb(0, 180, 168))
+        canvas?.drawColor(backgroundFill)
 
         //For Fill
-        brush.color = Color.rgb(0, 61, 80)
+        brush.color = processFill
         canvas?.drawRect(0f, 0f, fillShape, measuredHeight.toFloat(), brush)
 
         //For Text
-        pen.color = Color.WHITE
-        pen.textSize = 80f
+        pen.color = textColor
+        pen.textSize = textSize
         pen.textAlign = Paint.Align.CENTER
         canvas?.drawText(buttonText, measuredWidth/2f,
             ((measuredHeight/2f) - ((pen.descent() + pen.ascent()) / 2)),
             pen)
 
         //For Circle
-        brush.color = Color.rgb(255, 165, 30)
+        brush.color = circleFill
         canvas?.drawArc(rectArc, 2f, fillShape, true, brush)
 
         canvas?.save()
@@ -103,6 +125,7 @@ class LoadingButton @JvmOverloads constructor(
         valueAnimator = ValueAnimator.ofFloat(0f, widthSize.toFloat()).apply{
             duration = 1500
             interpolator = LinearInterpolator()
+            repeatCount = ValueAnimator.INFINITE
         }
     }
 }
